@@ -12,10 +12,10 @@ import java.awt.event.KeyAdapter;
 */
 
 public class KeyController extends KeyAdapter {
-	private final Presentation presentation; //Commands are given to the presentation
+	private Presentation presentation; //Commands are given to the presentation
 
 	public KeyController(Presentation p) {
-		this.presentation = p;
+		presentation = p;
 	}
 
 	public void keyPressed(KeyEvent keyEvent) {
@@ -24,12 +24,12 @@ public class KeyController extends KeyAdapter {
 			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_ENTER:
 			case '+':
-				this.presentation.nextSlide();
+				presentation.nextSlide();
 				break;
 			case KeyEvent.VK_PAGE_UP:
 			case KeyEvent.VK_UP:
 			case '-':
-				this.presentation.prevSlide();
+				presentation.prevSlide();
 				break;
 			case 'q':
 			case 'Q':

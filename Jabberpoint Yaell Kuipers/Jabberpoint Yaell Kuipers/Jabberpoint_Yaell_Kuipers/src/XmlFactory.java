@@ -1,11 +1,11 @@
-public class XmlFactory extends Factory{
+public class XMLFactory extends AccessorFactory{
     @Override
-    public XmlReader CreateReader() {
-        return new XmlReader();
+    public Reader CreateReader() {
+        return new XMLReader();
     }
 
     @Override
-    public XmlWriter CreateWriter() {
-        return new XmlWriter();
+    public Writer CreateWriter() {
+        return new XMLWriter();
     }
 }

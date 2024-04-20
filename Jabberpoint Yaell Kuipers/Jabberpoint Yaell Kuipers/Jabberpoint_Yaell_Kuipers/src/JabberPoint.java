@@ -1,4 +1,5 @@
 import javax.swing.JOptionPane;
+
 import java.io.IOException;
 
 /** JabberPoint Main Program
@@ -15,30 +16,28 @@ import java.io.IOException;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
-import java.io.IOException;
-
 public class JabberPoint {
-    protected static final String JABVERSION = "Jabberpoint 1.6 - OU version";
+	protected static final String IOERR = "IO Error: ";
+	protected static final String JABERR = "Jabberpoint Error ";
+	protected static final String JABVERSION = "Jabberpoint 1.6 - OU version";
 
-    public static void main(String[] argv) {
-        try {
-            Styles.createStyles();
-            Presentation presentation = new Presentation();
-            new SlideViewerFrame(JABVERSION, presentation);
+	/** The main program */
 
-            if (argv.length == 0) {
-                Factory.getFactory("Demo").createReader().loadFile(presentation, "demoPresentationFile");
-            } else {
-                String fileType = determineFileType(argv[0]);
-                Factory.getFactory(fileType).createReader().loadFile(presentation, argv[0]);
-            }
-            presentation.setSlideNumber(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	/** Het Main Programma */
+	public static void main(String argv[]) {
 
-    private static String determineFileType(String fileName) {
-        return "default";
-    }
+		Style.createStyles();
+		Presentation presentation = new Presentation();
+		new SlideViewerFrame(JABVERSION, presentation);
+		try {
+			if (argv.length == 0) { // een demo presentatie
+				AccessorFactory.getFactory("demo").CreateReader().loadFile(presentation, "");
+			}
+			presentation.setSlideNumber(0);
+		} catch (IOException ex) {
+			JOptionPane.showMessageDialog(null,
+					IOERR + ex, JABERR,
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
 }

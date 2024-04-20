@@ -3,7 +3,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
+
 import javax.imageio.ImageIO;
+
 import java.io.IOException;
 
 
@@ -19,50 +21,52 @@ import java.io.IOException;
 */
 
 public class BitmapItem extends SlideItem {
-    private BufferedImage bufferedImage;
-    private final String imageName;
+  private BufferedImage bufferedImage;
+  private String imageName;
+  
+  protected static final String FILE = "File ";
+  protected static final String NOTFOUND = " not found";
 
-    public BitmapItem(int level, String name) {
-        super(level);
-        this.imageName = name;
-        loadImage();
-    }
 
-    public BitmapItem() {
-        this(0, null);
-    }
+  	//level indicates the item-level; name indicates the name of the file with the image
+	public BitmapItem(int level, String name) {
+		super(level);
+		imageName = name;
+		try {
+			bufferedImage = ImageIO.read(new File(imageName));
+		}
+		catch (IOException e) {
+			System.err.println(FILE + imageName + NOTFOUND) ;
+		}
+	}
 
-    private void loadImage() {
-        if (imageName != null) {
-            try {
-                bufferedImage = ImageIO.read(new File(imageName));
-            } catch (IOException e) {
-                System.err.println("File " + imageName + " not found");
-            }
-        }
-    }
+	//An empty bitmap item
+	public BitmapItem() {
+		this(0, null);
+	}
 
-    public Rectangle getBoundingBox(Graphics g, ImageObserver observer, float scale, Style myStyle) {
-        if (bufferedImage == null) return new Rectangle();
+	//Returns the filename of the image
+	public String getName() {
+		return imageName;
+	}
 
-        int width = (int) (bufferedImage.getWidth(observer) * scale);
-        int leading = (int) (myStyle.getLeading() * scale);
-        int height = (int) (bufferedImage.getHeight(observer) * scale);
-
-        return new Rectangle(leading, 0, width, height);
-    }
+	//Returns the bounding box of the image
+	public Rectangle getBoundingBox(Graphics g, ImageObserver observer, float scale, Style myStyle) {
+		return new Rectangle((int) (myStyle.indent * scale), 0,
+				(int) (bufferedImage.getWidth(observer) * scale),
+				((int) (myStyle.leading * scale)) + 
+				(int) (bufferedImage.getHeight(observer) * scale));
+	}
 
 	//Draws the image
 	public void draw(int x, int y, float scale, Graphics g, Style myStyle, ImageObserver observer) {
-        if (bufferedImage == null) return;
-		int width = x + (int) (myStyle.getIndent() * scale);
-		int height = y + (int) (myStyle.getLeading() * scale);
-		int imageBufferWidth = (int) (this.bufferedImage.getWidth(observer)*scale);
-		int imageBufferHeight = (int) (this.bufferedImage.getHeight(observer)*scale);
-		g.drawImage(this.bufferedImage, width, height, imageBufferWidth, imageBufferHeight, observer);
+		int width = x + (int) (myStyle.indent * scale);
+		int height = y + (int) (myStyle.leading * scale);
+		g.drawImage(bufferedImage, width, height,(int) (bufferedImage.getWidth(observer)*scale),
+		(int) (bufferedImage.getHeight(observer)*scale), observer);
 	}
 
 	public String toString() {
-		return "BitmapItem[" + getLevel() + "," + this.imageName + "]";
+		return "BitmapItem[" + getLevel() + "," + imageName + "]";
 	}
 }
