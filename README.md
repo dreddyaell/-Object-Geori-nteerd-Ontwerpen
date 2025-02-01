@@ -1,1 +1,1 @@
-Ik heb alle oude code weg gehaald, ik vermoede dat er problemen ontstonden hierdoor. Daarnaast heb ik nog de feedback verwerkt. 
+Mocht Page 3 niet werken, dan zit de jabberpoint.png niet op de juist locatie. Op de een of andere manier als je de git pulled maakt hij een extra map aan waardoor het in de knel komt.
