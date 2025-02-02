@@ -17,7 +17,7 @@ public class JabberPoint {
 	private final Presentation presentation;
 
     /**
-	 * Constructor met Dependency Injection.
+	 * Constructor.
 	 */
 	public JabberPoint(Presentation presentation, KeyController keyController, MenuController menuController, SlideViewerFrame frame) {
 		this.presentation = presentation;
