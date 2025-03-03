@@ -141,19 +141,21 @@ public class MenuController extends MenuBar {
      */
     public void openFile(File file) {
         try {
-            String fileType = file.getName().endsWith(".xml") ? "xml" : "demo";
+            String fileType = file.getName().toLowerCase().endsWith(".xml") ? "xml" : "demo";
 
-            presentation.clear(); //Oude slides verwijderen voordat nieuwe worden geladen
+            presentation.clear(); // Oude slides verwijderen
 
             PresentationReader reader = AccessorFactory.getFactory(fileType).CreateReader();
             reader.loadFile(presentation, file.getAbsolutePath());
-            presentation.setSlideNumber(0); // ✅ Start altijd bij de eerste slide
+            presentation.setSlideNumber(0);
 
             if (parent != null) parent.repaint();
         } catch (IOException e) {
             showErrorDialog("Kan bestand niet openen: " + file.getName());
         }
     }
+
+
 
 
     /**

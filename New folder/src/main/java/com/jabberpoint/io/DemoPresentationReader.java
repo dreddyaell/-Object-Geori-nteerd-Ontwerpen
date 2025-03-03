@@ -14,7 +14,7 @@ import com.jabberpoint.model.Slide;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
-class DemoPresentationPresentationReader implements PresentationReader
+class DemoPresentationReader implements PresentationReader
 {
 	public void loadFile(Presentation presentation, String unusedFilename) {
 		presentation.setTitle("Demo Presentation");

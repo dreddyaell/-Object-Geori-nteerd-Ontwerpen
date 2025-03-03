@@ -1,7 +1,6 @@
 package com.jabberpoint.io;
 
 import com.jabberpoint.model.Presentation;
-
 import java.io.IOException;
 
 public interface PresentationReader {

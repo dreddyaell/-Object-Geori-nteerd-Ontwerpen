@@ -2,18 +2,31 @@ package com.jabberpoint.io;
 
 public class AccessorFactory {
 
+
     public static AccessorFactory getFactory(String type) {
-        // Return the appropriate factory instance based on the type
-        return new AccessorFactory();  // Simplified for this example
+        return new AccessorFactory(type);
     }
 
+    private final String type;
+
+    public AccessorFactory(String type) {
+        this.type = type.toLowerCase(); //
+    }
+
+
     public Writer CreateWriter() {
-        // Return an instance of DemoPresentationWriter or another Writer based on the type
         return new DemoPresentationWriter();
     }
 
+
     public PresentationReader CreateReader() {
-        // Return an instance of DemoPresentationReader or another Reader based on the type
-        return new DemoPresentationPresentationReader();
+        switch (type) {
+            case "xml":
+                return new XMLReader();
+            case "demo":
+                return new DemoPresentationReader();
+            default:
+                throw new IllegalArgumentException("Onbekend bestandstype: " + type);
+        }
     }
 }

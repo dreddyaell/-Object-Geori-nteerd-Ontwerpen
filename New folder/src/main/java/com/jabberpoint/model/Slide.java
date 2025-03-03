@@ -82,6 +82,11 @@ public class Slide {
 		}
 	}
 
+	public void appendItem(String text) {
+		items.add(new TextItem(1, text));
+	}
+
+
 
 	//Returns the scale to draw a slide
 	private float getScale(Rectangle area) {

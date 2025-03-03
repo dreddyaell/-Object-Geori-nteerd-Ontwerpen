@@ -34,12 +34,13 @@ public class TextItem extends SlideItem {
 	private static final String EMPTYTEXT = "No Text Given";
 
 //A textitem of int level with text string
-	public TextItem(int level, String string) {
-		super(level);
-		text = string;
-	}
+public TextItem(int level, String text) {
+	this.level = level;
+	this.text = text;
+}
 
-//An empty textitem
+
+	//An empty textitem
 	public TextItem() {
 		this(0, EMPTYTEXT);
 	}
@@ -109,6 +110,9 @@ public class TextItem extends SlideItem {
     	}
     	return layouts;
 	}
+
+
+
 
 	public String toString() {
 		return "TextItem[" + getLevel()+","+getText()+"]";
