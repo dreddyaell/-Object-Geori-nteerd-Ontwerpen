@@ -141,19 +141,25 @@ public class MenuController extends MenuBar {
      */
     public void openFile(File file) {
         try {
+            System.out.println("📂 Bestand openen: " + file.getAbsolutePath()); // ✅ Debugging
+            if (!file.exists()) {
+                throw new IOException("Bestand bestaat niet: " + file.getAbsolutePath());
+            }
+
             String fileType = file.getName().toLowerCase().endsWith(".xml") ? "xml" : "demo";
 
             presentation.clear(); // Oude slides verwijderen
 
             PresentationReader reader = AccessorFactory.getFactory(fileType).CreateReader();
-            reader.loadFile(presentation, file.getAbsolutePath());
+            reader.loadFile(presentation, file.getAbsolutePath()); // ✅ Controleer of hier een fout optreedt
             presentation.setSlideNumber(0);
 
             if (parent != null) parent.repaint();
         } catch (IOException e) {
-            showErrorDialog("Kan bestand niet openen: " + file.getName());
+            showErrorDialog("Kan bestand niet openen: " + e.getMessage()); // ✅ Laat de foutmelding zien
         }
     }
+
 
 
 

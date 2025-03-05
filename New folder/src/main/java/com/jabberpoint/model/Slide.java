@@ -82,10 +82,9 @@ public class Slide {
 		}
 	}
 
-	public void appendItem(String text) {
-		items.add(new TextItem(1, text));
+	public void appendImage(int level, String imagePath) {
+		items.add(new BitmapItem(level, imagePath));
 	}
-
 
 
 	//Returns the scale to draw a slide

@@ -2,12 +2,12 @@ package com.jabberpoint.io;
 
 import com.jabberpoint.model.Presentation;
 import com.jabberpoint.model.Slide;
-
-import java.io.File;
-import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.*;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * XMLReader leest een presentatie vanuit een XML-bestand.
@@ -18,13 +18,22 @@ public class XMLReader implements PresentationReader {
     public void loadFile(Presentation presentation, String filename) throws IOException {
         try {
             File xmlFile = new File(filename);
+            System.out.println("Laden van XML-bestand: " + xmlFile.getAbsolutePath());
+
+            if (!xmlFile.exists()) {
+                throw new IOException("Bestand niet gevonden: " + filename);
+            }
+
+            // ✅ DocumentBuilderFactory configureren om DTD te negeren
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
 
             // Root element
             Element root = doc.getDocumentElement();
-            presentation.setTitle(root.getElementsByTagName("title").item(0).getTextContent());
+            presentation.setTitle(root.getElementsByTagName("showtitle").item(0).getTextContent());
 
             NodeList slides = root.getElementsByTagName("slide");
 
@@ -33,13 +42,23 @@ public class XMLReader implements PresentationReader {
                 Slide slide = new Slide();
                 slide.setTitle(slideElement.getElementsByTagName("title").item(0).getTextContent());
 
-                NodeList texts = slideElement.getElementsByTagName("text");
-                for (int j = 0; j < texts.getLength(); j++) {
-                    slide.appendItem(texts.item(j).getTextContent());
+                NodeList items = slideElement.getElementsByTagName("item");
+                for (int j = 0; j < items.getLength(); j++) {
+                    Element item = (Element) items.item(j);
+                    String kind = item.getAttribute("kind");
+                    int level = Integer.parseInt(item.getAttribute("level"));
+                    String content = item.getTextContent();
+
+                    if ("text".equals(kind)) {
+                        slide.append(level, content);
+                    } else if ("image".equals(kind)) {
+                        slide.appendImage(level, content);
+                    }
                 }
 
                 presentation.append(slide);
             }
+            System.out.println("geen fouten!");
         } catch (Exception e) {
             throw new IOException("Fout bij laden van XML-bestand: " + e.getMessage());
         }
