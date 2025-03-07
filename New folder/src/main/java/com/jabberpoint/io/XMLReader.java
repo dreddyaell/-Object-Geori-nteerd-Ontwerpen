@@ -27,7 +27,7 @@ public class XMLReader implements PresentationReader {
             if (!xmlFile.exists()) {
                 throw new IOException("Bestand niet gevonden: " + filename);
             }
-            
+
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
             factory.setNamespaceAware(true);
