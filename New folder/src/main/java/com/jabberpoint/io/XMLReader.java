@@ -1,5 +1,6 @@
 package com.jabberpoint.io;
 
+import com.jabberpoint.model.BitmapItem;
 import com.jabberpoint.model.Presentation;
 import com.jabberpoint.model.Slide;
 import javax.xml.parsers.DocumentBuilder;
@@ -14,17 +15,19 @@ import java.io.IOException;
  */
 public class XMLReader implements PresentationReader {
 
+
     @Override
     public void loadFile(Presentation presentation, String filename) throws IOException {
         try {
             File xmlFile = new File(filename);
-            System.out.println("Laden van XML-bestand: " + xmlFile.getAbsolutePath());
+            BitmapItem.basePath = new File(filename).getParent(); // Zet het pad VOORDAT objecten worden aangemaakt
+            System.out.println("Afbeeldingsmap correct ingesteld op: " + BitmapItem.basePath);
+
 
             if (!xmlFile.exists()) {
                 throw new IOException("Bestand niet gevonden: " + filename);
             }
-
-            // ✅ DocumentBuilderFactory configureren om DTD te negeren
+            
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
             factory.setNamespaceAware(true);
@@ -62,5 +65,8 @@ public class XMLReader implements PresentationReader {
         } catch (Exception e) {
             throw new IOException("Fout bij laden van XML-bestand: " + e.getMessage());
         }
+
+
     }
+
 }

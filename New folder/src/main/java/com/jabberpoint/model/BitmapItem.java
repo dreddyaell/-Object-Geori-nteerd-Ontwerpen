@@ -26,31 +26,62 @@ public class BitmapItem extends SlideItem {
 	public BitmapItem(int level, String name) {
 		super(level);
 		imageName = name;
-		loadImage();
-	}
 
-
-	private void loadImage() {
-		if (imageName == null || imageName.isEmpty()) {
-			System.err.println("❌ Ongeldige bestandsnaam voor afbeelding.");
-			return;
+		// Controleer of het basispad correct is ingesteld
+		if (BitmapItem.basePath == null || BitmapItem.basePath.isEmpty()) {
+			System.err.println("Waarschuwing: basePath is leeg! Beelden worden mogelijk niet correct geladen.");
 		}
 
-		File imageFile = new File(imageName);
-		if (!imageFile.exists()) {
-			System.err.println(FILE + imageName + NOTFOUND);
-			return;
+		// Bepaal het juiste pad voor de afbeelding
+		File imageFile;
+		if (BitmapItem.basePath != null && !BitmapItem.basePath.isEmpty()) {
+			imageFile = new File(BitmapItem.basePath, imageName); // Zoek in dezelfde map als de XML
+		} else {
+			imageFile = new File(imageName);
 		}
+
+		// Debug output om te zien waar de afbeelding wordt gezocht
+		System.out.println("Probeert afbeelding te laden vanaf: " + imageFile.getAbsolutePath());
 
 		try {
 			bufferedImage = ImageIO.read(imageFile);
 			if (bufferedImage == null) {
-				System.err.println("Kan afbeelding niet laden (mogelijk ongeldig bestand): " + imageName);
+				System.err.println("Kan afbeelding niet laden (mogelijk ongeldig bestand): " + imageFile.getAbsolutePath());
+			} else {
+				System.out.println("Afbeelding geladen: " + imageFile.getAbsolutePath());
 			}
 		} catch (IOException e) {
-			System.err.println("Fout bij laden van afbeelding: " + imageName + " → " + e.getMessage());
+			System.err.println("Fout bij laden afbeelding: " + imageFile.getAbsolutePath() + " → " + e.getMessage());
 		}
 	}
+
+	private void loadImage() {
+		if (imageName == null || imageName.isEmpty()) {
+			System.err.println("Ongeldige bestandsnaam voor afbeelding.");
+			return;
+		}
+
+		File imageFile = new File(BitmapItem.basePath, imageName);
+		System.out.println("Probeert afbeelding te laden: " + imageFile.getAbsolutePath());
+
+		if (!imageFile.exists()) {
+			System.err.println("Afbeelding bestaat niet: " + imageFile.getAbsolutePath());
+		} else {
+			System.out.println("Afbeelding gevonden: " + imageFile.getAbsolutePath());
+		}
+
+
+		try {
+			bufferedImage = ImageIO.read(imageFile);
+			if (bufferedImage == null) {
+				System.err.println("Kan afbeelding niet laden (mogelijk ongeldig bestand): " + imageFile.getAbsolutePath());
+			}
+		} catch (IOException e) {
+			System.err.println("Fout bij laden afbeelding: " + imageFile.getAbsolutePath() + " → " + e.getMessage());
+		}
+	}
+
+	public static String basePath = "";
 
 
 	public String getName() {
@@ -69,7 +100,8 @@ public class BitmapItem extends SlideItem {
 
 	public void draw(int x, int y, float scale, Graphics g, Style myStyle, ImageObserver observer) {
 		if (bufferedImage == null) {
-			System.err.println("Kan afbeelding niet tekenen " + imageName);
+			System.err.println("Kan afbeelding niet tekenen: " + imageName);
+			System.err.println("Probeert afbeelding te laden vanaf: " + new File(BitmapItem.basePath, imageName).getAbsolutePath());
 			return;
 		}
 
@@ -79,6 +111,7 @@ public class BitmapItem extends SlideItem {
 				(int) (bufferedImage.getWidth(observer) * scale),
 				(int) (bufferedImage.getHeight(observer) * scale), observer);
 	}
+
 
 	@Override
 	public String toString() {
